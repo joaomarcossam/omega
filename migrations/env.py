@@ -1,10 +1,11 @@
 from logging.config import fileConfig
 from alembic import context
 
+from discord_bot.core.settings import Env
 # importa Base e os models
 from infra.database import Base, engine
 import infra.models  # garante que todos os models sejam carregados
-from core.settings import Env
+
 
 # carregar envs (.env ou variáveis do painel)
 Env.load()
