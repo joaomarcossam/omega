@@ -20,11 +20,6 @@ class Omegon(commands.Cog, Module):
             return
         await self.bot.process_commands(message)
 
-    # Comando de teste
-    @commands.command(name="hello")
-    async def hello(self, ctx):
-        await ctx.send("Hello! 🤔")
-
     # Comando para parar o bot
     @commands.command(name="stop")
     async def stop(self, ctx):
