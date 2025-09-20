@@ -14,3 +14,4 @@ omega-venv/
 
 # Local Env
 .env
+.vscode/

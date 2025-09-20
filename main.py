@@ -1,9 +1,8 @@
 from discordia.omegon import Omegon
-from environment import Env
+from settings import Env
 from utils.font import Font
 
 def main():
-    Env.load()
     print(Font("Booting Omegon...").cyan)
     omegon = Omegon()
     omegon.run()
