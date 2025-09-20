@@ -1,13 +1,11 @@
 import logging
 import asyncio
-import discord
+
 from services import log_service
 
 
 class DiscordLogHandler(logging.Handler):
-    """Handler que envia logs do root logger para o canal configurado no Discord."""
-
-    def __init__(self, bot: discord.Client):
+    def __init__(self, bot):
         super().__init__()
         self.bot = bot
 
@@ -23,10 +21,9 @@ class DiscordLogHandler(logging.Handler):
 
             msg = self.format(record)
 
-            # garante execução no loop do discord
-            asyncio.run_coroutine_threadsafe(
-                channel.send(f"```{msg}```"), self.bot.loop
-            )
+            # manda pro Discord sem travar o loop
+            asyncio.create_task(channel.send(f"```{msg}```"))
+
         except Exception:
-            # nunca deixar o handler quebrar o logger
+            # nunca deixar o handler explodir
             self.handleError(record)
