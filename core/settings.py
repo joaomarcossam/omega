@@ -1,14 +1,18 @@
-from os import environ
-import inspect
+import os
 from dotenv import load_dotenv
-
-from utils.font import Font
 
 load_dotenv()
 
+class Env:
+    @staticmethod
+    def load():
+        Env.OMEGON_TOKEN = os.getenv("OMEGON_TOKEN")
+        Env.TESTE = os.getenv("TESTE")
+
+
 def main():
-    print(environ.get('TESTE'))
-    print(environ.get('OMEGON_TOKEN'))
+    print(os.environ.get('TESTE'))
+    print(os.environ.get('OMEGON_TOKEN'))
 
 
 if __name__=="__main__":
