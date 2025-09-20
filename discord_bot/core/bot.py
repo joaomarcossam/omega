@@ -1,7 +1,10 @@
 import asyncio
+import logging
+
 import discord
 from discord.ext import commands
 
+from utils.discord_log_handler import DiscordLogHandler
 from ..core.settings import Env
 from utils.font import Font
 from ..modules.logchannel import LogChannel
@@ -33,6 +36,20 @@ def run() -> None:
 
     async def runner():
         await register_cogs(bot)
+        setup_logging(bot)
         await bot.start(Env.OMEGON_TOKEN)
 
     asyncio.run(runner())
+
+def setup_logging(bot):
+    # handler para o discord
+    discord_handler = DiscordLogHandler(bot)
+    discord_handler.setFormatter(
+        logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    )
+
+    root_logger = logging.getLogger()  # logger global
+    root_logger.setLevel(logging.INFO)
+
+    # adiciona ao root sem remover o console
+    root_logger.addHandler(discord_handler)
