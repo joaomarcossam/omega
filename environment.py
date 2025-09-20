@@ -3,28 +3,42 @@ import inspect
 from dotenv import dotenv_values
 
 from utils.font import Font
-from utils.message import Message
-
-class EnvHandler:
-    def __init__(self, env_dict: dict):
-        for key, value in env_dict.items():
-            self.__setattr__(key, value)
+        
+class Env(metaclass=EnvMeta):
+    keyvals = {}
     
     @staticmethod
-    def load():
-        try:
-            frame = inspect.stack()[1]
-            subpath = os.path.relpath(frame.filename).split(os.sep)
-            folder = "/".join(subpath[:-1])
-            current_file = subpath[-1]
+    def load(module: str = None):
+        if module:
+            path = Env._path_from_module(module)
+        else:
+            path = Env._path_from_current_module()
         
-            print(Font(f"- Loading envs: {Font(current_file).underline}").green, end="")
-            Message.ok(x=30)
-            envs = dotenv_values(f"{folder}/.env")
-            
-            return EnvHandler(envs)
+        Env.keyvals |= dotenv_values(dotenv_path=path)
+
+    @staticmethod
+    def _path_from_module(module):
+        if module not in os.listdir("."):
+            raise ModuleNotFoundError("Diretório não encontrado")
         
-        except Exception:
-            Message.fail(rjust=25)
-            raise
+        if not os.path.isdir(module): 
+            raise NotADirectoryError("O caminho não é um diretório")
         
+        return f"{module}/.env"
+    @staticmethod
+    def _path_from_current_module():
+        frame = inspect.stack()[1]
+        subpath = os.path.relpath(frame.filename).split(os.sep)
+        path = "/".join(subpath[:-1])
+        
+        return f"{path}/.env".strip("/")
+
+    @staticmethod    
+    def list():
+        for key, value in Env.keyvals.items():
+            print(f"{Font(key).bold}: {Font(value).blue.bold}")
+    
+
+if __name__ == "__main__":
+    Env.load()
+    

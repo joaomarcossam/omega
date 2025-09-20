@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
 
-from environment import EnvHandler
+from environment import Env
 from utils.font import Font
 from utils.module import Module
 
-env = EnvHandler.load()
+Env.load()
 
 class Omegon(Module):
     def __init__(self):
@@ -41,4 +41,4 @@ class Omegon(Module):
 
     def run(self):
         print(Font("Omegon is starting...").blink.cyan)
-        self.bot.run(env.OMEGON_TOKEN)
+        self.bot.run(Env.OMEGON_TOKEN)
