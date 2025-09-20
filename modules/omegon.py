@@ -1,44 +1,33 @@
 import discord
 from discord.ext import commands
-
-from core.settings import Env
 from utils.font import Font
 from utils.module import Module
 
-Env.load()
-
-class Omegon(Module):
-    def __init__(self):
+class Omegon(commands.Cog, Module):
+    def __init__(self, bot):
+        self.bot = bot
         super().__init__()
-        intents = discord.Intents.default()
-        intents.message_content = True
-        self.bot = commands.Bot(command_prefix='?', intents=intents)
-        self.setup_events()
-        self.setup_commands()
 
-    def setup_events(self):
-        @self.bot.event
-        async def on_ready():
-            print(Font("♪ Omegon bot is ready!").cyan.double_underline.bold)
+    # Evento quando o bot fica online
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print(Font("♪ Omegon bot is ready!").cyan.double_underline.bold)
 
-        @self.bot.event
-        async def on_message(message):
-            if message.author == self.bot.user:
-                return
-            await self.bot.process_commands(message)
+    # Evento ao receber mensagem
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author == self.bot.user:
+            return
+        await self.bot.process_commands(message)
 
-    def setup_commands(self):
-        @self.bot.command(name='hello')
-        async def hello(ctx):
-            await ctx.send('Hello! 🤔')
+    # Comando de teste
+    @commands.command(name="hello")
+    async def hello(self, ctx):
+        await ctx.send("Hello! 🤔")
 
-        @self.bot.command(name='stop')
-        async def stop(ctx):
-            await ctx.send("Bot is stopping...")
-            # Corrigido: aspas dentro do f-string
-            print(f"{Font('\\nStoping Program...').black.bold}")
-            Module.stop_all_modules()
-
-    def run(self):
-        print(Font("Omegon is starting...").blink.cyan)
-        self.bot.run(Env.OMEGON_TOKEN)
+    # Comando para parar o bot
+    @commands.command(name="stop")
+    async def stop(self, ctx):
+        await ctx.send("Bot is stopping...")
+        print(f"{Font('Stopping Program...').black.bold}")
+        Module.stop_all_modules()

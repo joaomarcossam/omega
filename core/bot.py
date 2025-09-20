@@ -1,13 +1,21 @@
+import discord
 from discord.ext import commands
-import os
-from modules import omegon, hello
+from core.settings import Env
+from modules import Omegon
+from utils.font import Font
 
-class Bot(commands.Bot):
-    def __init__(self, **kwargs):
-        super().__init__(command_prefix="?", intents=kwargs.get("intents"))
-        self.load_extensions()
 
-    def load_extensions(self):
+def create_bot():
+    intents = discord.Intents.default()
+    intents.message_content = True
+    bot = commands.Bot(command_prefix="?", intents=intents)
 
-        self.add_cog(omegon.Omegon(self))
-        self.add_cog(hello.Hello(self))
+    # Carregar cogs
+    bot.add_cog(Omegon(bot))
+    return bot
+
+def run():
+    Env.load()
+    bot = create_bot()
+    print(Font("Omegon is starting...").blink.cyan)
+    bot.run(Env.OMEGON_TOKEN)

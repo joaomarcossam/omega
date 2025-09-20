@@ -1,10 +1,9 @@
-from modules.omegon import Omegon
+from core.bot import run
 from utils.font import Font
 
 def main():
     print(Font("Booting Omegon...").cyan)
-    omegon = Omegon()
-    omegon.run()
+    run()
 
 if __name__ == "__main__":
     main()
