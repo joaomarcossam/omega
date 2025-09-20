@@ -1,3 +1,4 @@
+# discordia/omegon.py
 import discord
 from discord.ext import commands
 
@@ -19,13 +20,12 @@ class Omegon(Module):
     def setup_events(self):
         @self.bot.event
         async def on_ready():
-            print(Font(f"♪ Omegon bot is ready!").cyan.double_underline.bold)
+            print(Font("♪ Omegon bot is ready!").cyan.double_underline.bold)
 
         @self.bot.event
         async def on_message(message):
             if message.author == self.bot.user:
                 return
-
             await self.bot.process_commands(message)
 
     def setup_commands(self):
@@ -36,7 +36,8 @@ class Omegon(Module):
         @self.bot.command(name='stop')
         async def stop(ctx):
             await ctx.send("Bot is stopping...")
-            print(f"{Font("\nStoping Program...").black.bold}")
+            # Corrigido: aspas dentro do f-string
+            print(f"{Font('\\nStoping Program...').black.bold}")
             Module.stop_all_modules()
 
     def run(self):
