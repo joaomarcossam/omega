@@ -8,17 +8,10 @@ class Omegon(commands.Cog, Module):
         self.bot = bot
         super().__init__()
 
-    # Evento quando o bot fica online
+    # (Opcional) Apenas manter o on_ready se quiser um "log" específico
     @commands.Cog.listener()
     async def on_ready(self):
-        print(Font("♪ Omegon bot is ready!").cyan.double_underline.bold)
-
-    # Evento ao receber mensagem
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if message.author == self.bot.user:
-            return
-        await self.bot.process_commands(message)
+        print(Font("♪ Omegon module loaded!").cyan.double_underline.bold)
 
     # Comando para parar o bot
     @commands.command(name="stop")
