@@ -10,11 +10,11 @@ class Env:
         Env.OMEGON_TOKEN = os.getenv("OMEGON_TOKEN")
 
         # Banco de dados
-        Env.DB_USER = os.getenv("DB_USER")
-        Env.DB_PASS = os.getenv("DB_PASS")
-        Env.DB_HOST = os.getenv("DB_HOST")
+        Env.DB_USER = os.getenv("DB_USER", "u483539_IVFUQqVTUC")
+        Env.DB_PASS = os.getenv("DB_PASS", "RrYofY!kn^9TydvcxA!nN@tf")  # cuidado: senha em claro
+        Env.DB_HOST = os.getenv("DB_HOST", "us.mysql.db.bot-hosting.net")
         Env.DB_PORT = int(os.getenv("DB_PORT", 3306))
-        Env.DB_NAME = os.getenv("DB_NAME")
+        Env.DB_NAME = os.getenv("DB_NAME", "s483539_omega_db")
 
 
 def main():
