@@ -3,6 +3,15 @@ import inspect
 from dotenv import dotenv_values
 
 from utils.font import Font
+
+class EnvMeta(type):
+    def __getattr__(cls, name: str):
+        if name in cls.keyvals:
+            return cls.keyvals[name]
+        if name in os.environ:
+            return os.environ[name]
+        raise AttributeError(f"Variável de ambiente '{name}' não definida")
+
         
 class Env(metaclass=EnvMeta):
     keyvals = {}
