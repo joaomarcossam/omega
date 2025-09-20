@@ -1,4 +1,4 @@
-from core.bot import run
+from discord_bot.core.bot import run
 from utils.font import Font
 
 def main():
