@@ -1,10 +1,13 @@
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# importa Base e os models do seu projeto
-from infra.database import Base
+# importa Base e os models
+from infra.database import Base, engine
 import infra.models  # garante que todos os models sejam carregados
+from core.settings import Env
+
+# carregar envs (.env ou variáveis do painel)
+Env.load()
 
 # Alembic Config object
 config = context.config
@@ -13,12 +16,13 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Aqui o Alembic vai olhar para os metadados do seu Base
+# Metadados
 target_metadata = Base.metadata
+
 
 def run_migrations_offline() -> None:
     """Rodar migrations em 'offline mode'."""
-    url = config.get_main_option("sqlalchemy.url")
+    url = str(engine.url)
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -32,13 +36,7 @@ def run_migrations_offline() -> None:
 
 def run_migrations_online() -> None:
     """Rodar migrations em 'online mode'."""
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
-
-    with connectable.connect() as connection:
+    with engine.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
