@@ -1,5 +1,4 @@
-from discordia.omegon import Omegon
-from settings import Env
+from modules.omegon import Omegon
 from utils.font import Font
 
 def main():
