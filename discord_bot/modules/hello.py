@@ -11,3 +11,4 @@ class Hello(commands.Cog):
     async def hello(self, ctx):
         logger.info("Hello command called by %s", ctx.author)
         await ctx.send("Hello! 👋")
+
