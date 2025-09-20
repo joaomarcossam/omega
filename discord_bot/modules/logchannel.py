@@ -11,7 +11,7 @@ class LogChannel(commands.Cog):
     @commands.group(name="logchannel", invoke_without_command=True)
     async def logchannel(self, ctx: commands.Context):
         """Gerencia o canal de logs."""
-        await ctx.send("Use `?logchannel set <canal>` para definir o canal de logs.")
+        await ctx.send("Use `?logchannel set #canal` para definir o canal de logs.")
 
     @logchannel.command(name="set")
     async def set_logchannel(self, ctx: commands.Context, channel: discord.TextChannel):
