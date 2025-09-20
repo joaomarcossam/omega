@@ -22,8 +22,8 @@ def get_connection():
     )
 
 # ---------- SQLAlchemy (modo ORM) ----------
-DB_USER = quote_plus(Env.DB_USER)
-DB_PASS = quote_plus(Env.DB_PASS)
+DB_USER = Env.DB_USER
+DB_PASS = quote_plus(Env.DB_PASS)  # só a senha precisa escapar
 DB_HOST = Env.DB_HOST
 DB_PORT = Env.DB_PORT
 DB_NAME = Env.DB_NAME
