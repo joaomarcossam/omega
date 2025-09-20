@@ -1,8 +1,7 @@
-# discordia/omegon.py
 import discord
 from discord.ext import commands
 
-from settings import Env
+from core.settings import Env
 from utils.font import Font
 from utils.module import Module
 
