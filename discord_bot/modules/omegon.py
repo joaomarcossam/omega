@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from utils.font import Font
 from utils.module import Module

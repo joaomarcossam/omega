@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-from core.settings import Env
+from ..core.settings import Env
 from utils.font import Font
-from modules.omegon import Omegon
-from modules.hello import Hello
+from ..modules.omegon import Omegon
+from ..modules.hello import Hello
 
 def create_bot():
     intents = discord.Intents.default()
