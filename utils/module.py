@@ -40,4 +40,4 @@ class Module:
         print(Font(f"• Stopping module: {Font(class_name).underline}").yellow, end="")
         Message.ok(x=30)
         del self
-        
+
