@@ -1,28 +1,35 @@
+import asyncio
+import discord
 from discord.ext import commands
+
 from ..core.settings import Env
 from utils.font import Font
 from ..modules.logchannel import LogChannel
 from ..modules.omegon import Omegon
 from ..modules.hello import Hello
 
-def create_bot():
-    intents = commands.Intents.default()
-    intents.message_content = True
-    bot = commands.Bot(command_prefix="?", intents=intents)
-    return bot
 
-async def register_cogs(bot):
+def create_bot() -> commands.Bot:
+    """Cria a instância do bot com intents configurados."""
+    intents = discord.Intents.default()
+    intents.message_content = True
+
+    return commands.Bot(command_prefix="?", intents=intents)
+
+
+async def register_cogs(bot: commands.Bot) -> None:
+    """Registra todos os Cogs do bot."""
     await bot.add_cog(Omegon(bot))
     await bot.add_cog(Hello(bot))
     await bot.add_cog(LogChannel(bot))
 
-def run():
+
+def run() -> None:
+    """Ponto de entrada para rodar o bot."""
     Env.load()
     bot = create_bot()
-    print(Font("Omegon is starting...").blink.cyan)
 
-    # usa asyncio.run para iniciar com setup assíncrono
-    import asyncio
+    print(Font("Omegon is starting...").blink.cyan)
 
     async def runner():
         await register_cogs(bot)
