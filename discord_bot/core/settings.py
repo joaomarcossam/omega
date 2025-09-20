@@ -6,8 +6,15 @@ load_dotenv()
 class Env:
     @staticmethod
     def load():
+        # Tokens
         Env.OMEGON_TOKEN = os.getenv("OMEGON_TOKEN")
-        Env.TESTE = os.getenv("TESTE")
+
+        # Banco de dados
+        Env.DB_USER = os.getenv("DB_USER")
+        Env.DB_PASS = os.getenv("DB_PASS")
+        Env.DB_HOST = os.getenv("DB_HOST")
+        Env.DB_PORT = int(os.getenv("DB_PORT", 3306))
+        Env.DB_NAME = os.getenv("DB_NAME")
 
 
 def main():
