@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import pymysql
 from pymysql.cursors import DictCursor
+from urllib.parse import quote_plus
 
 from discord_bot.core.settings import Env
 
@@ -21,7 +22,13 @@ def get_connection():
     )
 
 # ---------- SQLAlchemy (modo ORM) ----------
-DATABASE_URL = f"mysql+pymysql://{Env.DB_USER}:{Env.DB_PASS}@{Env.DB_HOST}:{Env.DB_PORT}/{Env.DB_NAME}"
+DB_USER = quote_plus(Env.DB_USER)
+DB_PASS = quote_plus(Env.DB_PASS)
+DB_HOST = Env.DB_HOST
+DB_PORT = Env.DB_PORT
+DB_NAME = Env.DB_NAME
+
+DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 engine = create_engine(DATABASE_URL, echo=False, future=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
