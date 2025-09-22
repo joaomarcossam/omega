@@ -15,6 +15,8 @@ class Env:
         Env.DB_HOST = os.getenv("DB_HOST", "us.mysql.db.bot-hosting.net")
         Env.DB_PORT = int(os.getenv("DB_PORT", 3306))
         Env.DB_NAME = os.getenv("DB_NAME", "s483539_omega_db")
+        Env.RIOT_API_KEY = os.getenv("RIOT_API_KEY")
+        Env.RIOT_API_KEY = os.getenv("RIOT_API_KEY", 'br1')
 
 
 def main():
