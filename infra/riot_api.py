@@ -1,12 +1,13 @@
 import aiohttp
 import os
-from discord_bot.core import settings
 
-BASE_URL = f"https://{settings.RIOT_REGION}.api.riotgames.com"
+from discord_bot.core.settings import Env
+
+BASE_URL = f"https://{Env.RIOT_REGION}.api.riotgames.com"
 
 class RiotAPI:
     def __init__(self):
-        self.headers = {"X-Riot-Token": settings.RIOT_API_KEY}
+        self.headers = {"X-Riot-Token": Env.RIOT_API_KEY}
 
     async def get_summoner_by_name(self, name: str):
         url = f"{BASE_URL}/lol/summoner/v4/summoners/by-name/{name}"
