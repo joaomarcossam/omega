@@ -17,6 +17,7 @@ class Env:
         Env.DB_NAME = os.getenv("DB_NAME", "s483539_omega_db")
         Env.RIOT_API_KEY = os.getenv("RIOT_API_KEY")
         Env.RIOT_REGION = os.getenv("RIOT_REGION", 'br1')
+        Env.RIOT_PLATFORM = os.getenv("RIOT_PLATFORM", 'BR1')
 
 
 def main():
