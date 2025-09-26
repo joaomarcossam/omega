@@ -72,7 +72,7 @@ class League(commands.Cog):
                     fila = "🗡️ Solo/Duo" if queue == "RANKED_SOLO_5x5" else "🛡️ Flex"
                     value = f"**{tier} {rank}** - {lp} PDL\n📊 {wins}W / {losses}L"
                     embed.add_field(name=fila, value=value, inline=True)
-                    embed.add_field(name="Hotstreak", value="✅" if hotstreak else "❌", inline=True)
+                    embed.add_field(name="Hotstreak", value="✅" if hotstreak else "❌", inline=False)
 
             embed.set_footer(text="Dados fornecidos pela Riot API")
 
