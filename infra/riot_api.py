@@ -11,6 +11,8 @@ DEFAULT_PLATFORM = Env.RIOT_PLATFORM
 
 
 class RiotAPI:
+    """Camada mais baixa: chamadas HTTP diretas à Riot API."""
+
     def __init__(self):
         self.headers = {"X-Riot-Token": Env.RIOT_API_KEY}
 
@@ -34,30 +36,44 @@ class RiotAPI:
         url = f"https://{platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/{summoner_id}"
         return await self._get(url)
 
+    async def get_champion_mastery_by_puuid(self, puuid: str, platform: str = DEFAULT_PLATFORM):
+        # CHAMPION-MASTERY-V4 → platform host
+        url = f"https://{platform}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}"
+        return await self._get(url)
+
     async def _get(self, url: str):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(url, headers=self.headers, ssl=True) as resp:
-                status = resp.status
-                if status == 200:
-                    try:
-                        data = await resp.json(content_type=None)
-                        logger.info(f"[GET] {url} - 200")
-                        return data
-                    except Exception:
-                        text = await resp.text()
-                        logger.error(f"[GET] {url} - 200 mas payload não-JSON: {text[:300]}")
+        """Executa um GET e trata erros comuns da Riot API."""
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=self.headers, ssl=True) as resp:
+                    status = resp.status
+                    text = await resp.text()
+
+                    if status == 200:
+                        try:
+                            data = await resp.json(content_type=None)
+                            logger.info(f"[GET] {url} - 200")
+                            return data
+                        except Exception:
+                            logger.error(f"[GET] {url} - 200 mas payload não-JSON: {text[:300]}")
+                            return None
+
+                    if status == 404:
+                        logger.warning(f"[GET] {url} - 404")
+                        return None
+                    if status == 401:
+                        logger.error(f"[GET] {url} - 401 - {text}")
+                        return None
+                    if status == 429:
+                        logger.error(f"[GET] {url} - 429 - headers={dict(resp.headers)}")
                         return None
 
-                text = await resp.text()
-                if status == 404:
-                    logger.warning(f"[GET] {url} - 404")
-                    return None
-                if status == 401:
-                    logger.error(f"[GET] {url} - 401 - {text}")
-                    return None
-                if status == 429:
-                    logger.error(f"[GET] {url} - 429 - headers={dict(resp.headers)}")
+                    logger.error(f"[GET] {url} - {status} - {text[:300]}")
                     return None
 
-                logger.error(f"[GET] {url} - {status} - {text[:300]}")
-                return None
+        except aiohttp.ClientError as e:
+            logger.exception(f"[GET] {url} - erro de cliente aiohttp: {e}")
+            return None
+        except Exception as e:
+            logger.exception(f"[GET] {url} - erro inesperado: {e}")
+            return None

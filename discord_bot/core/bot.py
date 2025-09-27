@@ -3,11 +3,12 @@ import discord
 from discord.ext import commands
 
 from utils.discord_log_handler import DiscordLogHandler
-from services import log_service
 from ..core.settings import Env
 from utils.font import Font
+from ..modules import Perfil
 from ..modules.hello import Hello
-from ..modules.league import League
+from ..modules.league.elo import Elo
+
 from ..modules.omegon import Omegon
 from ..modules.logchannel import LogChannel
 
@@ -22,7 +23,8 @@ async def register_cogs(bot: commands.Bot):
     await bot.add_cog(Omegon(bot))
     await bot.add_cog(Hello(bot))
     await bot.add_cog(LogChannel(bot))
-    await bot.add_cog(League(bot))
+    await bot.add_cog(Elo(bot))
+    await bot.add_cog(Perfil(bot))
 
 
 def setup_logging(bot):
