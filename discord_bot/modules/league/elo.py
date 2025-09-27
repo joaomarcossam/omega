@@ -1,43 +1,26 @@
-from logging import getLogger
 import discord
 from discord.ext import commands
-from services.riot_service import RiotService
-
-logger = getLogger("discord_logs")
-
-TIER_COLORS = {
-    "IRON": discord.Color.dark_gray(),
-    "BRONZE": discord.Color.dark_orange(),
-    "SILVER": discord.Color.light_gray(),
-    "GOLD": discord.Color.gold(),
-    "PLATINUM": discord.Color.teal(),
-    "EMERALD": discord.Color.green(),
-    "DIAMOND": discord.Color.blue(),
-    "MASTER": discord.Color.purple(),
-    "GRANDMASTER": discord.Color.red(),
-    "CHALLENGER": discord.Color.magenta(),
-}
+from .base import LeagueBase, TIER_COLORS
 
 
-class League(commands.Cog):
+class Elo(LeagueBase):
     def __init__(self, bot):
-        self.bot = bot
-        self.service = RiotService()
+        super().__init__(bot)
 
     @commands.command(name="elo")
     async def elo(self, ctx, riot_id: str, platform: str = "br1"):
         try:
-            logger.info("Elo command called by %s", ctx.author)
+            self.logger.info("Elo command called by %s", ctx.author)
 
-            if "#" not in riot_id:
+            game_name, tag_line = self.split_riot_id(riot_id)
+            if not game_name:
                 await ctx.send("❌ Formato inválido. Use: `?elo Nome#TAG [plataforma]`")
                 return
 
-            game_name, tag_line = riot_id.split("#", 1)
             data = await self.service.get_player_info(game_name, tag_line, platform)
 
             if not data:
-                logger.warning("Player not found for %s#%s", game_name, tag_line)
+                self.logger.warning("Player not found for %s#%s", game_name, tag_line)
                 await ctx.send("❌ Jogador não encontrado!")
                 return
 
@@ -77,8 +60,8 @@ class League(commands.Cog):
             embed.set_footer(text="Dados fornecidos pela Riot API")
 
             await ctx.send(embed=embed)
-            logger.info("Elo result sent for %s", ctx.author)
+            self.logger.info("Elo result sent for %s", ctx.author)
 
         except Exception as e:
-            logger.exception(f"Erro ao buscar elo de {riot_id} e {platform}. Erro: {e}")
+            self.logger.exception(f"Erro ao buscar elo de {riot_id} e {platform}. Erro: {e}")
             await ctx.send("⚠️ Ocorreu um erro ao buscar os dados.")
