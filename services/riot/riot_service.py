@@ -58,7 +58,6 @@ class RiotService(RiotAPIService):
             "name": account.get("gameName") or summoner.get("name"),
             "level": summoner.get("summonerLevel"),
             "profileIconId": summoner.get("profileIconId"),
-            "summonerId": summoner.get("id"),
             "puuid": puuid,
             "ranks": ranks,
         }
@@ -92,3 +91,38 @@ class RiotService(RiotAPIService):
             "total_mastery_points": total_points,
         }
 
+    async def get_current_match(self, game_name: str, tag_line: str, platform: str = "br1"):
+        account = await self.get_account_by_riot_id(game_name, tag_line)
+        if not account:
+            return None
+
+        puuid = account["puuid"]
+        summoner = await self.get_summoner_by_puuid(puuid, platform)
+        if not summoner:
+            return None
+
+        match = await self.fetch_current_game(puuid, platform)
+        if not match:
+            return None
+
+        # 🔹 garante que campeões estão carregados
+        if not self._champions_loaded:
+            await self.load_champions()
+
+        participants = []
+        for p in match.get("participants", []):
+            ranks = await self.get_league_entries_by_puuid(p["puuid"], platform) or []
+            main_rank = ranks[0] if ranks else {"tier": "UNRANKED", "rank": ""}
+            champ_info = self.get_champion(p["championId"])
+
+            participants.append({
+                "riotId": p.get("riotId", "Desconhecido"),
+                "championId": p["championId"],
+                "championName": champ_info["name"],
+                "championIcon": champ_info["icon"],
+                "teamId": p["teamId"],
+                "rank": f"{main_rank.get('tier', 'UNRANKED')} {main_rank.get('rank', '')}",
+                "hotStreak": main_rank.get("hotStreak", False),
+            })
+
+        return {"gameId": match["gameId"], "participants": participants}

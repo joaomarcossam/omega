@@ -20,3 +20,8 @@ class RiotAPIService(RiotBaseService):
         """Busca maestrias de campeão pelo PUUID."""
         return await self.api.get_champion_mastery_by_puuid(puuid, platform)
 
+    async def fetch_current_game(self, puuid: str, platform: str = "br1"):
+        """Busca informações do jogo atual do invocador pelo puuid."""
+        return await self.api.get_current_game_by_puuid(puuid, platform)
+
+

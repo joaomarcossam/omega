@@ -9,8 +9,6 @@ class Perfil(LeagueBase):
     @commands.command(name="perfil")
     async def perfil(self, ctx, riot_id: str, platform: str = "br1"):
         try:
-            self.logger.info("Perfil command called by %s", ctx.author)
-
             game_name, tag_line = self.split_riot_id(riot_id)
             if not game_name:
                 await ctx.send("❌ Formato inválido. Use: `?perfil Nome#TAG [plataforma]`")

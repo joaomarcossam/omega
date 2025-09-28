@@ -8,6 +8,7 @@ from utils.font import Font
 from ..modules import Perfil
 from ..modules.hello import Hello
 from ..modules.league.elo import Elo
+from ..modules.league.partida import Partida
 
 from ..modules.omegon import Omegon
 from ..modules.logchannel import LogChannel
@@ -25,6 +26,7 @@ async def register_cogs(bot: commands.Bot):
     await bot.add_cog(LogChannel(bot))
     await bot.add_cog(Elo(bot))
     await bot.add_cog(Perfil(bot))
+    await bot.add_cog(Partida(bot))
 
 
 def setup_logging(bot):

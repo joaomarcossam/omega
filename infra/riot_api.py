@@ -41,6 +41,16 @@ class RiotAPI:
         url = f"https://{platform}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}"
         return await self._get(url)
 
+    async def get_current_game_by_puuid(self, puuid: str, platform: str = DEFAULT_PLATFORM):
+        # SPECTATOR-V5 → platform host (usa encryptedPUUID, não mais summonerId)
+        url = f"https://{platform}.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/{puuid}"
+        return await self._get(url)
+
+    async def get_summoner_by_summoner_id(self, summoner_id: str, platform: str = DEFAULT_PLATFORM):
+        # SUMMONER-V4 → platform host
+        url = f"https://{platform}.api.riotgames.com/lol/summoner/v4/summoners/{summoner_id}"
+        return await self._get(url)
+
     async def _get(self, url: str):
         """Executa um GET e trata erros comuns da Riot API."""
         try:
@@ -54,7 +64,8 @@ class RiotAPI:
                             data = await resp.json(content_type=None)
                             logger.info(f"[GET] {url} - 200")
                             return data
-                        except Exception:
+                        except Exception as e:
+                            print("Quebrou aqui: ", e)
                             logger.error(f"[GET] {url} - 200 mas payload não-JSON: {text[:300]}")
                             return None
 
