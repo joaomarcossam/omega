@@ -10,8 +10,6 @@ class Elo(LeagueBase):
     @commands.command(name="elo")
     async def elo(self, ctx, riot_id: str, platform: str = "br1"):
         try:
-            self.logger.info("Elo command called by %s", ctx.author)
-
             game_name, tag_line = self.split_riot_id(riot_id)
             if not game_name:
                 await ctx.send("❌ Formato inválido. Use: `?elo Nome#TAG [plataforma]`")
@@ -60,7 +58,6 @@ class Elo(LeagueBase):
             embed.set_footer(text="Dados fornecidos pela Riot API")
 
             await ctx.send(embed=embed)
-            self.logger.info("Elo result sent for %s", ctx.author)
 
         except Exception as e:
             self.logger.exception(f"Erro ao buscar elo de {riot_id} e {platform}. Erro: {e}")

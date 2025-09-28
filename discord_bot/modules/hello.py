@@ -9,6 +9,5 @@ class Hello(commands.Cog):
 
     @commands.command(name="hello")
     async def hello(self, ctx):
-        logger.info("Hello command called by %s", ctx.author)
         await ctx.send("Hello! 👋")
 
